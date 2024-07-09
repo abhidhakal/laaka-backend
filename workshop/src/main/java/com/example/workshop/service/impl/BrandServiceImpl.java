@@ -22,7 +22,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public List<User> getDataById(int id) {
+    public List<Brand> getDataById(int id) {
         return List.of();
     }
 

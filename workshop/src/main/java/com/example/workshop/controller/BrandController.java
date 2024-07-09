@@ -23,8 +23,8 @@ public class BrandController {
     }
 
     @GetMapping("/id")
-    public GlobalApiResponse getUserById(@PathVariable int id){
-        return GlobalApiResponse.<List<User>>builder().
+    public GlobalApiResponse getDataById(@PathVariable int id){
+        return GlobalApiResponse.<List<Brand>>builder().
                 data(this.brandService.getDataById(id))
                 .StatusCode(200)
                 .message("Data has been successfully retrieved")

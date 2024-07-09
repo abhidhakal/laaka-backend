@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface BrandService {
     void saveData(BrandPojo brandPojo);
-    List<User> getDataById(int id);
+    List<Brand> getDataById(int id);
     Brand deleteBrandById(int id);
 }
