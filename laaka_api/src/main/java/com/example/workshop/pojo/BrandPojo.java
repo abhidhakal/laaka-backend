@@ -10,6 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BrandPojo {
+
     private Integer brandId;
     private String brandName;
+
 }

@@ -13,8 +13,8 @@ import lombok.*;
 @Table(name = "brand")
 public class Brand {
     @Id
-    @SequenceGenerator(name = "shoes_seq_gen", sequenceName = "shoes_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "shoes_seq_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "brand_seq_gen", sequenceName = "brand_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "brand_seq_gen", strategy = GenerationType.SEQUENCE)
     private Integer brandId;
 
     @Column(name = "brandName", nullable = false)

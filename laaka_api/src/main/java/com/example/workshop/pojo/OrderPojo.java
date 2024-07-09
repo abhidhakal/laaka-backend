@@ -20,7 +20,6 @@ public class OrderPojo {
     private Date orderDate;
     private String orderStatus;
     private Integer userId;
-    private User user;
     private double totalPrice;
     private List<OrderItem> orderItems;
 
