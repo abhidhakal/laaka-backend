@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>workshop</artifactId>
+    <artifactId>laaka_api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>workshop</name>
     <description>workshop</description>
