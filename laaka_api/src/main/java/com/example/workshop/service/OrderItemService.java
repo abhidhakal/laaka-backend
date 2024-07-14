@@ -1,12 +1,13 @@
 package com.example.workshop.service;
 
 import com.example.workshop.entity.OrderItem;
-import com.example.workshop.pojo.OrderItemPojo;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderItemService {
-    void saveData(OrderItemPojo orderItemPojo);
-    List<OrderItem> getDataById(int id);
-    OrderItem deleteOrderItemById(int id);
+    List<OrderItem> getAllOrderItems();
+    Optional<OrderItem> getOrderItemById(Integer id);
+    OrderItem createOrderItem(OrderItem orderItem);
+    OrderItem updateOrderItem(Integer id, OrderItem orderItemDetails);
+    void deleteOrderItem(Integer id);
 }

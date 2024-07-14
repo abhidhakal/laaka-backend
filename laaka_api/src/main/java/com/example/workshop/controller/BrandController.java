@@ -1,44 +1,45 @@
 package com.example.workshop.controller;
 
-import com.example.workshop.entity.Brand;
-import com.example.workshop.entity.User;
-import com.example.workshop.pojo.BrandPojo;
-import com.example.workshop.service.BrandService;
-import com.example.workshop.shared_pojo.GlobalApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.workshop.entity.Brand;
+import com.example.workshop.service.BrandService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/Brand")
+@RequestMapping("/api/brands")
 @RequiredArgsConstructor
 public class BrandController {
 
-    private final BrandService brandService;
+    private BrandService brandService;
 
-    @PostMapping("/save")
-    public void save(@RequestBody BrandPojo brandPojo){
-        this.brandService.saveData(brandPojo);
+    @GetMapping
+    public List<Brand> getAllBrands() {
+        return brandService.getAllBrands();
     }
 
-    @GetMapping("/id")
-    public GlobalApiResponse getDataById(@PathVariable int id){
-        return GlobalApiResponse.<List<Brand>>builder().
-                data(this.brandService.getDataById(id))
-                .StatusCode(200)
-                .message("Data has been successfully retrieved")
-                .build();
+    @GetMapping("/{id}")
+    public ResponseEntity<Brand> getBrandById(@PathVariable Integer id) {
+        Optional<Brand> brand = brandService.getBrandById(id);
+        return brand.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public GlobalApiResponse deleteBrandById(@PathVariable int id) {
-        Brand deletedBrand = brandService.deleteBrandById(id);
-        return GlobalApiResponse.<Brand>builder()
-                .data(deletedBrand)
-                .StatusCode(200)
-                .message("User has been successfully deleted")
-                .build();
+    @PostMapping
+    public Brand createBrand(@RequestBody Brand brand) {
+        return brandService.createBrand(brand);
     }
-    
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Brand> updateBrand(@PathVariable Integer id, @RequestBody Brand brandDetails) {
+        return ResponseEntity.ok(brandService.updateBrand(id, brandDetails));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBrand(@PathVariable Integer id) {
+        brandService.deleteBrand(id);
+        return ResponseEntity.noContent().build();
+    }
 }

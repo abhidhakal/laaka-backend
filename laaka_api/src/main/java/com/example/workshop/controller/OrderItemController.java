@@ -1,45 +1,45 @@
 package com.example.workshop.controller;
 
-import com.example.workshop.entity.Brand;
-import com.example.workshop.entity.Order;
-import com.example.workshop.entity.OrderItem;
-import com.example.workshop.pojo.BrandPojo;
-import com.example.workshop.pojo.OrderItemPojo;
-import com.example.workshop.service.OrderItemService;
-import com.example.workshop.shared_pojo.GlobalApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.workshop.entity.OrderItem;
+import com.example.workshop.service.OrderItemService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/OrderItem")
+@RequestMapping("/api/order-items")
 @RequiredArgsConstructor
 public class OrderItemController {
 
-    private final OrderItemService orderItemService;
+    private OrderItemService orderItemService;
 
-    @PostMapping("/save")
-    public void save(@RequestBody OrderItemPojo orderItemPojo){
-        this.orderItemService.saveData(orderItemPojo);
+    @GetMapping
+    public List<OrderItem> getAllOrderItems() {
+        return orderItemService.getAllOrderItems();
     }
 
-    @GetMapping("/id")
-    public GlobalApiResponse getDataById(@PathVariable int id){
-        return GlobalApiResponse.<List<OrderItem>>builder().
-                data(this.orderItemService.getDataById(id))
-                .StatusCode(200)
-                .message("Data has been successfully retrieved")
-                .build();
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderItem> getOrderItemById(@PathVariable Integer id) {
+        Optional<OrderItem> orderItem = orderItemService.getOrderItemById(id);
+        return orderItem.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public GlobalApiResponse deleteOrderItemById(@PathVariable int id) {
-        OrderItem deletedOrderItem = orderItemService.deleteOrderItemById(id);
-        return GlobalApiResponse.<OrderItem>builder()
-                .data(deletedOrderItem)
-                .StatusCode(200)
-                .message("User has been successfully deleted")
-                .build();
+    @PostMapping
+    public OrderItem createOrderItem(@RequestBody OrderItem orderItem) {
+        return orderItemService.createOrderItem(orderItem);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderItem> updateOrderItem(@PathVariable Integer id, @RequestBody OrderItem orderItemDetails) {
+        return ResponseEntity.ok(orderItemService.updateOrderItem(id, orderItemDetails));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrderItem(@PathVariable Integer id) {
+        orderItemService.deleteOrderItem(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,12 +1,13 @@
 package com.example.workshop.service;
 
 import com.example.workshop.entity.User;
-import com.example.workshop.pojo.UserPojo;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
-    void saveData(UserPojo userPojo);
-    List<User> getDataById(int id);
-    User deleteDataById(int id);
+    List<User> getAllUsers();
+    Optional<User> getUserById(Integer id);
+    User createUser(User user);
+    User updateUser(Integer id, User userDetails);
+    void deleteUser(Integer id);
 }
