@@ -1,10 +1,10 @@
 package com.example.workshop.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.example.workshop.entity.Shoes;
 import com.example.workshop.repository.ShoesRepository;
 import com.example.workshop.service.ShoesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,14 +32,12 @@ public class ShoesServiceImpl implements ShoesService {
     @Override
     public Shoes updateShoes(Integer id, Shoes shoesDetails) {
         Shoes shoes = shoesRepository.findById(id).orElseThrow(() -> new RuntimeException("Shoes not found"));
-
         shoes.setName(shoesDetails.getName());
         shoes.setCategory(shoesDetails.getCategory());
         shoes.setBrandName(shoesDetails.getBrandName());
         shoes.setPrice(shoesDetails.getPrice());
         shoes.setStock(shoesDetails.getStock());
         shoes.setImageUrl(shoesDetails.getImageUrl());
-
         return shoesRepository.save(shoes);
     }
 

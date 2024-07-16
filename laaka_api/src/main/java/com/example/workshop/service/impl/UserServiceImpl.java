@@ -1,16 +1,18 @@
 package com.example.workshop.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.example.workshop.entity.User;
 import com.example.workshop.repository.UserRepository;
 import com.example.workshop.service.UserService;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -20,8 +22,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Integer id) {
-        return userRepository.findById(id);
+    public User getUserById(Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElse(null);
     }
 
     @Override
@@ -30,17 +33,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Integer id, User userDetails) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-
-        user.setUsername(userDetails.getUsername());
-        user.setPassword(userDetails.getPassword());
-        user.setEmail(userDetails.getEmail());
-        user.setFullname(userDetails.getFullname());
-        user.setContact(userDetails.getContact());
-        user.setAddress(userDetails.getAddress());
-
-        return userRepository.save(user);
+    public User updateUser(Integer id, User user) {
+        if (userRepository.existsById(id)) {
+            user.setUserId(id);
+            return userRepository.save(user);
+        }
+        return null;
     }
 
     @Override

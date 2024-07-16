@@ -9,10 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "shoes", uniqueConstraints = {
-        @UniqueConstraint(name = "UNIQUE_shoe_id", columnNames = "shoeId")
-})
-
+@Table(name = "shoes")
 public class Shoes {
     @Id
     @SequenceGenerator(name = "shoes_seq_gen", sequenceName = "shoes_id_seq", allocationSize = 1)
@@ -25,8 +22,8 @@ public class Shoes {
     @Column(name = "type", nullable = false)
     private String category;
 
-    @OneToOne
-    @JoinColumn(name = "brandName")
+    @ManyToOne
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brandName;
 
     @Column(name = "price", nullable = false)
@@ -37,5 +34,4 @@ public class Shoes {
 
     @Column(name = "image", nullable = false)
     private String imageUrl;
-
 }

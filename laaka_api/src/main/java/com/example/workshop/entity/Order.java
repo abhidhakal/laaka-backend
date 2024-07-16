@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order", uniqueConstraints = {
-        @UniqueConstraint(name = "UNIQUE_order_id", columnNames = "id")
+@Table(name = "orders", uniqueConstraints = {
+        @UniqueConstraint(name = "UNIQUE_order_id", columnNames = "orderId")
 })
 public class Order {
 
@@ -36,7 +36,6 @@ public class Order {
     @Column(name = "total", nullable = false)
     private double totalPrice;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
-
 }

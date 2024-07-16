@@ -1,6 +1,7 @@
 package com.example.workshop.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.workshop.entity.Brand;
@@ -11,9 +12,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/brands")
-@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class BrandController {
-
+    @Autowired
     private BrandService brandService;
 
     @GetMapping

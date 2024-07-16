@@ -1,6 +1,7 @@
 package com.example.workshop.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.workshop.entity.Order;
@@ -11,9 +12,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
-@RequiredArgsConstructor
 public class OrderController {
-
+    @Autowired
     private OrderService orderService;
 
     @GetMapping

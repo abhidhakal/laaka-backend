@@ -3,8 +3,6 @@ package com.example.workshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
-
 @Builder
 @Getter
 @Setter
@@ -12,9 +10,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "customer", uniqueConstraints = {
-        @UniqueConstraint(name = "UNIQUE_user_id", columnNames = "id")
+        @UniqueConstraint(name = "UNIQUE_user_id", columnNames = "userId")
 })
-
 public class User {
 
     @Id

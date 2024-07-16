@@ -1,6 +1,8 @@
 package com.example.workshop.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.workshop.entity.Shoes;
@@ -11,8 +13,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/shoes")
-@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class ShoesController {
+    @Autowired
     private ShoesService shoesService;
 
     @GetMapping
@@ -27,9 +30,11 @@ public class ShoesController {
     }
 
     @PostMapping
-    public Shoes createShoes(@RequestBody Shoes shoes) {
-        return shoesService.createShoes(shoes);
+    public ResponseEntity<Shoes> createShoes(@RequestBody Shoes shoes) {
+        Shoes createdShoe = shoesService.createShoes(shoes);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdShoe);
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Shoes> updateShoes(@PathVariable Integer id, @RequestBody Shoes shoesDetails) {

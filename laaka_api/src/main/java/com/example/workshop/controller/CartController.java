@@ -12,9 +12,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/carts")
-@RequiredArgsConstructor
 public class CartController {
-
+    @Autowired
     private CartService cartService;
 
     @GetMapping

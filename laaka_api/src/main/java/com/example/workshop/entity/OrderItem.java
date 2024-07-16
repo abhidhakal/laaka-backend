@@ -3,7 +3,6 @@ package com.example.workshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 @Builder
 @Getter
 @Setter
@@ -14,8 +13,8 @@ import lombok.*;
 public class OrderItem {
 
     @Id
-    @SequenceGenerator(name = "order_seq_gen", sequenceName = "order_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "order_seq_gen", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "order_item_seq_gen", sequenceName = "order_item_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "order_item_seq_gen", strategy = GenerationType.SEQUENCE)
     private Integer orderItemId;
 
     @ManyToOne
@@ -25,6 +24,10 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "shoe_id")
     private Shoes shoe;
+
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
