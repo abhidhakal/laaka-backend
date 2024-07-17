@@ -1,6 +1,5 @@
 package com.example.workshop.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +22,13 @@ public class BrandController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Brand> getBrandById(@PathVariable Integer id) {
+    public ResponseEntity<Optional<Brand>> getBrandById(@PathVariable Integer id) {
         Optional<Brand> brand = brandService.getBrandById(id);
-        return brand.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (brand != null) {
+            return ResponseEntity.ok(brand);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping

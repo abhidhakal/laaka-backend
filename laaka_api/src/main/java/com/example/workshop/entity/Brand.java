@@ -19,4 +19,7 @@ public class Brand {
 
     @Column(name = "brandName", nullable = false)
     private String brandName;
+
+    public Brand(String brandName) {
+    }
 }
