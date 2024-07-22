@@ -2,8 +2,8 @@ package com.example.workshop.controller;
 
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.workshop.entity.User;
@@ -13,7 +13,9 @@ import com.example.workshop.service.UserService;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
+
     @Autowired
+    @Qualifier("userServiceImpl")
     private UserService userService;
 
     @GetMapping
