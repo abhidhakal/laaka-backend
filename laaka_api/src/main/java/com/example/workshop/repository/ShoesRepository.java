@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ShoesRepository extends JpaRepository<Shoes, Integer> {
     List<Shoes> findByTrending(Boolean trending);
+    List<Shoes> findByCategoryContainingIgnoreCase(String category);
+
 }

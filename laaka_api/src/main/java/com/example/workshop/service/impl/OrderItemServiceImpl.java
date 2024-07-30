@@ -31,7 +31,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItem updateOrderItem(Integer id, OrderItem orderItemDetails) {
-        OrderItem orderItem = orderItemRepository.findById(id).orElseThrow(() -> new RuntimeException("OrderItem not found"));
+        OrderItem orderItem = orderItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("OrderItem not found"));
 
         orderItem.setOrder(orderItemDetails.getOrder());
         orderItem.setShoe(orderItemDetails.getShoe());

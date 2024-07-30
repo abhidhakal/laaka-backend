@@ -1,7 +1,6 @@
 package com.example.workshop.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.workshop.entity.OrderItem;
@@ -12,9 +11,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/order-items")
+@RequiredArgsConstructor
 public class OrderItemController {
-    @Autowired
-    private OrderItemService orderItemService;
+
+    private final OrderItemService orderItemService;
 
     @GetMapping
     public List<OrderItem> getAllOrderItems() {
@@ -28,13 +28,15 @@ public class OrderItemController {
     }
 
     @PostMapping
-    public OrderItem createOrderItem(@RequestBody OrderItem orderItem) {
-        return orderItemService.createOrderItem(orderItem);
+    public ResponseEntity<OrderItem> createOrderItem(@RequestBody OrderItem orderItem) {
+        OrderItem createdOrderItem = orderItemService.createOrderItem(orderItem);
+        return ResponseEntity.ok(createdOrderItem);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<OrderItem> updateOrderItem(@PathVariable Integer id, @RequestBody OrderItem orderItemDetails) {
-        return ResponseEntity.ok(orderItemService.updateOrderItem(id, orderItemDetails));
+        OrderItem updatedOrderItem = orderItemService.updateOrderItem(id, orderItemDetails);
+        return ResponseEntity.ok(updatedOrderItem);
     }
 
     @DeleteMapping("/{id}")

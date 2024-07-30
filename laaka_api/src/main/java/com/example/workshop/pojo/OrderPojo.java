@@ -21,6 +21,6 @@ public class OrderPojo {
     private String orderStatus;
     private User user;
     private double totalPrice;
+    private String billingAddress;
     private List<OrderItem> orderItems;
-
 }

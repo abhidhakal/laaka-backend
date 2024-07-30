@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.workshop.entity.Order;
+import com.example.workshop.pojo.OrderPojo;
 import com.example.workshop.service.OrderService;
 
 import java.util.List;
@@ -28,7 +29,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
+    public Order createOrder(@RequestBody OrderPojo orderPojo) {
+        Order order = new Order();
+        order.setOrderDate(orderPojo.getOrderDate());
+        order.setOrderStatus(orderPojo.getOrderStatus());
+        order.setUser(orderPojo.getUser());
+        order.setTotalPrice(orderPojo.getTotalPrice());
+        order.setBillingAddress(orderPojo.getBillingAddress());
+        order.setOrderItems(orderPojo.getOrderItems());
         return orderService.createOrder(order);
     }
 

@@ -87,4 +87,10 @@ public class ShoesServiceImpl implements ShoesService {
         shoes.setTrending(trending);
         shoesRepository.save(shoes);
     }
+
+    @Override
+    public List<Shoes> getShoesByCategory(String category) {
+        return shoesRepository.findByCategoryContainingIgnoreCase(category);
+    }
+
 }

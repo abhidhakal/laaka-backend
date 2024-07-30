@@ -119,5 +119,11 @@ public class ShoesController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/category/{category}")
+    public List<Shoes> getShoesByCategory(@PathVariable String category) {
+        return shoesService.getShoesByCategory(category);
+    }
+
+
 }
 

@@ -13,9 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orders", uniqueConstraints = {
-        @UniqueConstraint(name = "UNIQUE_order_id", columnNames = "orderId")
-})
+@Table(name = "orders")
 public class Order {
 
     @Id
@@ -23,18 +21,21 @@ public class Order {
     @GeneratedValue(generator = "order_seq_gen", strategy = GenerationType.SEQUENCE)
     private Integer orderId;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "order_date", nullable = false)
     private Date orderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "order_status", nullable = false)
     private String orderStatus;
 
-    @Column(name = "total", nullable = false)
+    @Column(name = "total_price", nullable = false)
     private double totalPrice;
+
+    @Column(name = "billing_address", nullable = false)
+    private String billingAddress;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();

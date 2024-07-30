@@ -31,7 +31,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrder(Integer id, Order orderDetails) {
-        Order order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
 
         order.setOrderDate(orderDetails.getOrderDate());
         order.setUser(orderDetails.getUser());

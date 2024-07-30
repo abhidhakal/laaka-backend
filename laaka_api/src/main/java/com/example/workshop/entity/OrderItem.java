@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orderitem")
+@Table(name = "order_item")
 public class OrderItem {
 
     @Id
@@ -25,13 +25,13 @@ public class OrderItem {
     @JoinColumn(name = "shoe_id")
     private Shoes shoe;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "price", nullable = false)
     private double price;
+
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 }

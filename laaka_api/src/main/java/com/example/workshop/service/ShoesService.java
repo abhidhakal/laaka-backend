@@ -14,4 +14,6 @@ public interface ShoesService {
     void deleteShoes(Integer id);
     List<Shoes> getTrendingShoes();
     void setTrending(Integer id, Boolean trending);
+    List<Shoes> getShoesByCategory(String category);
+
 }
