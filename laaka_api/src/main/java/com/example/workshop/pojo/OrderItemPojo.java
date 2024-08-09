@@ -17,6 +17,7 @@ public class OrderItemPojo {
     private Order order;
     private Shoes shoes;
     private Integer quantity;
+    private String size;
     private Double price;
 
 }

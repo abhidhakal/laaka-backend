@@ -34,7 +34,6 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findById(id).orElseThrow(() -> new RuntimeException("Cart not found"));
 
         cart.setUser(cartDetails.getUser());
-        cart.setOrderItems(cartDetails.getOrderItems());
 
         return cartRepository.save(cart);
     }

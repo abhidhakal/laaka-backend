@@ -24,10 +24,6 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private Date orderDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(name = "order_status", nullable = false)
     private String orderStatus;
 

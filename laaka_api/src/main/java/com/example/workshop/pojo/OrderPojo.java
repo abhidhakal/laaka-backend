@@ -19,7 +19,6 @@ public class OrderPojo {
     private Integer orderId;
     private Date orderDate;
     private String orderStatus;
-    private User user;
     private double totalPrice;
     private String billingAddress;
     private List<OrderItem> orderItems;

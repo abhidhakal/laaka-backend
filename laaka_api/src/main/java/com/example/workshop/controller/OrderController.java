@@ -1,21 +1,21 @@
 package com.example.workshop.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.workshop.entity.Order;
 import com.example.workshop.pojo.OrderPojo;
 import com.example.workshop.service.OrderService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
+@RequiredArgsConstructor
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @GetMapping
     public List<Order> getAllOrders() {
@@ -29,15 +29,17 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody OrderPojo orderPojo) {
+    public ResponseEntity<Order> createOrder(@RequestBody OrderPojo orderPojo) {
+        System.out.println("Creating order with data: " + orderPojo);
         Order order = new Order();
-        order.setOrderDate(orderPojo.getOrderDate());
+        order.setOrderDate(new Date());
         order.setOrderStatus(orderPojo.getOrderStatus());
-        order.setUser(orderPojo.getUser());
         order.setTotalPrice(orderPojo.getTotalPrice());
         order.setBillingAddress(orderPojo.getBillingAddress());
         order.setOrderItems(orderPojo.getOrderItems());
-        return orderService.createOrder(order);
+
+        Order createdOrder = orderService.createOrder(order);
+        return ResponseEntity.ok(createdOrder);
     }
 
     @PutMapping("/{id}")

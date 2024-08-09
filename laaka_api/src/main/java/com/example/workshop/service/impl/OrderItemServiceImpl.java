@@ -35,7 +35,6 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new RuntimeException("OrderItem not found"));
 
         orderItem.setOrder(orderItemDetails.getOrder());
-        orderItem.setShoe(orderItemDetails.getShoe());
         orderItem.setQuantity(orderItemDetails.getQuantity());
         orderItem.setPrice(orderItemDetails.getPrice());
 

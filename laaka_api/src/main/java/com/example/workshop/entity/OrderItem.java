@@ -31,7 +31,6 @@ public class OrderItem {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @Column(name = "size", nullable = false)
+    private String size;
 }
