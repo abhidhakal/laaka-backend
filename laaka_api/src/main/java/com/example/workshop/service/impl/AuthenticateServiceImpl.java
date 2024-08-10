@@ -1,7 +1,7 @@
 package com.example.workshop.service.impl;
 
+import com.example.workshop.dto.AuthenticateRequest;
 import com.example.workshop.dto.AuthenticateResponse;
-import com.example.workshop.dto.LoginRequest;
 import com.example.workshop.entity.User;
 import com.example.workshop.repository.UserRepository;
 import com.example.workshop.security.JwtService;
@@ -31,25 +31,16 @@ public class AuthenticateServiceImpl implements AuthenticateService {
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
-    public AuthenticateResponse authenticate(LoginRequest request) {
-        logger.info("Attempting authentication for user: {}", request.getEmail());
-        try {
-            Optional<User> user = userRepository.findByEmail(request.getEmail());
+    public AuthenticateResponse authenticate(AuthenticateRequest authenticateRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticateRequest.getEmail(), authenticateRequest.getPassword()
+                )
+        );
 
-            logger.info("User found, attempting to authenticate");
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user, request.getPassword())
-            );
-
-            logger.info("Authentication successful, generating token");
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String jwtToken = jwtService.generateToken(userDetails);
-
-            logger.info("Token generated successfully");
-            return new AuthenticateResponse(jwtToken);
-        } catch (Exception e) {
-            logger.error("Authentication failed for user: {}", request.getEmail(), e);
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials", e);
-        }
+        UserDetails userDetails = userRepository.findByEmail(authenticateRequest.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+        String jwtToken = jwtService.generateToken(userDetails);
+        return AuthenticateResponse.builder().token(jwtToken).build();
     }
 }

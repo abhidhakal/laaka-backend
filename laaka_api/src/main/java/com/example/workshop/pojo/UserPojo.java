@@ -15,7 +15,6 @@ import java.util.Date;
 public class UserPojo {
 
     private Integer userId;
-    private String username;
     private String password;
     private String email;
     private String fullname;

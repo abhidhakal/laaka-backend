@@ -1,7 +1,7 @@
 package com.example.workshop.controller;
 
+import com.example.workshop.dto.AuthenticateRequest;
 import com.example.workshop.dto.AuthenticateResponse;
-import com.example.workshop.dto.LoginRequest;
 import com.example.workshop.dto.SignupRequest;
 import com.example.workshop.entity.User;
 import com.example.workshop.repository.UserRepository;
@@ -32,17 +32,17 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/signup")
+    @PostMapping("/signup")  // Fixed URL mapping
     public ResponseEntity<String> signup(@RequestBody SignupRequest request) {
-        logger.info("Signup request received: {}", request.getEmail());
+        logger.info("Signup request received for email: {}", request.getEmail());
         try {
             // Check if the user already exists
             Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
             if (existingUser.isPresent()) {
+                logger.warn("Signup failed: Email {} already in use", request.getEmail());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
             }
 
-            // If the user does not exist, proceed to create a new user
             User newUser = new User();
             newUser.setEmail(request.getEmail());
             newUser.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -51,22 +51,23 @@ public class AuthController {
             newUser.setAddress(request.getAddress());
             userRepository.save(newUser);
 
+            logger.info("User registered successfully with email: {}", request.getEmail());
             return ResponseEntity.ok("User registered successfully");
         } catch (Exception e) {
-            logger.error("Error during signup", e);
+            logger.error("Error during signup for email: {}", request.getEmail(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during signup");
         }
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        logger.info("Login request received: {}", request.getEmail());
+    @PostMapping("/login")  // Fixed URL mapping
+    public ResponseEntity<AuthenticateResponse> authenticate(@RequestBody AuthenticateRequest authenticateRequest) {
         try {
-            AuthenticateResponse response = authenticateService.authenticate(request);
+            logger.info("Login request received for email: {}", authenticateRequest.getEmail());
+            AuthenticateResponse response = authenticateService.authenticate(authenticateRequest);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            logger.error("Login failed for user: {}", request.getEmail(), e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            logger.error("Error during login for email: {}", authenticateRequest.getEmail(), e);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 }

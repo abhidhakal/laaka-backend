@@ -5,12 +5,15 @@ import com.example.workshop.service.impl.CustomUserDetailsService;
 import com.example.workshop.security.JwtService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,10 +30,20 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
-    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtService jwtService) {
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtService jwtService, @Lazy JwtAuthenticationFilter jwtAuthFilter) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());  // Using the existing passwordEncoder Bean
+        return authenticationProvider;
     }
 
     @Bean
@@ -52,12 +65,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/orders/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/orders/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/shoes/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasAuthority("Admin")  // From the other config
+                        .requestMatchers("/authenticate").permitAll()  // From the other config
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable);
-
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  // From the other config
+                .authenticationProvider(authenticationProvider())  // Added from the other config
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);  // Using the existing jwtAuthFilter
 
         return http.build();
     }
@@ -81,7 +97,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();  // Kept the existing passwordEncoder
     }
 
     @Bean

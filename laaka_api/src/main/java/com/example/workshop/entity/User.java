@@ -3,10 +3,12 @@ package com.example.workshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -24,9 +26,6 @@ public class User implements UserDetails {
     @GeneratedValue(generator = "users_seq_gen", strategy = GenerationType.SEQUENCE)
     private Integer userId;
 
-    @Column(name = "username", nullable = false)
-    private String username;
-
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -42,17 +41,26 @@ public class User implements UserDetails {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private List<String> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            foreignKey = @ForeignKey(name = "FK_users_roles_userId"),
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"),
+            inverseForeignKey = @ForeignKey(name = "FK_users_roles_roleId"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            uniqueConstraints = @UniqueConstraint(name = "UNIQUE_users_roles_userIdRoleId",
+                    columnNames = {"user_id", "role_id"})
+    )
+    private Collection<Role> roles;
 
-    @Column(name = "token")
-    private String token;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
     @Override
