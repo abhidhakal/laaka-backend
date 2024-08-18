@@ -11,8 +11,8 @@
     <groupId>com.example</groupId>
     <artifactId>laaka_api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>workshop</name>
-    <description>workshop</description>
+    <name>laaka_api</name>
+    <description>laaka_api</description>
     <properties>
         <java.version>17</java.version>
     </properties>
